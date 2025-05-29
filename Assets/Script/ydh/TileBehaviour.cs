@@ -1,9 +1,11 @@
 using Photon.Pun;
 using System.Diagnostics;
+using Unity.AI.Navigation;
 using UnityEngine;
 public class TileBehaviour : MonoBehaviourPun
 {
     public TileState _tileState { get; private set; } = TileState.None;
+    private static NavMeshController _navMeshController;
     private Renderer _renderer;
     private Color _originalColor;
     private bool _isSelected = false;
@@ -17,9 +19,39 @@ public class TileBehaviour : MonoBehaviourPun
     public void SetTileState(TileState newState)
     {
         _tileState = newState;
-        UnityEngine.Debug.Log($"[SetTileState] {gameObject.name} → 상태: {_tileState}");
         UpdateColor();
-    }  
+        UpdateNavMeshModifier();
+        if (_tileState == TileState.Installable)
+        {
+            // 최초 1회만 찾고 static에 저장
+            if (_navMeshController == null)
+                _navMeshController = FindFirstObjectByType<NavMeshController>();
+
+            _navMeshController?.BakeNavMesh();
+        }
+    }
+    private void UpdateNavMeshModifier()
+    {
+        if (_tileState == TileState.Installable || _tileState == TileState.StartPoint || _tileState == TileState.EndPoint)
+        {
+            gameObject.layer = LayerMask.NameToLayer("WalkableTile");
+
+            if (GetComponent<NavMeshModifier>() == null)
+            {
+                var modifier = gameObject.AddComponent<NavMeshModifier>();
+                modifier.overrideArea = true;
+                modifier.area = 0; // Walkable
+            }
+        }
+        else
+        {
+            gameObject.layer = LayerMask.NameToLayer("Default");
+
+            var modifier = GetComponent<NavMeshModifier>();
+            if (modifier != null)
+                Destroy(modifier);
+        }
+    }
 
     private void UpdateColor()
     {

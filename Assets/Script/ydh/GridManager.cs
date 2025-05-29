@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private TileContext _tileContext;
     [SerializeField] private TMP_InputField FileName;
+    [SerializeField] private NavMeshController _navMeshController;
 
     private string SaveFileName => string.IsNullOrWhiteSpace(FileName.text)
         ? "map_data.json" : AppendJson(FileName.text);
@@ -84,7 +86,7 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-
+        _navMeshController.BakeNavMesh();
         Debug.Log($"¸Ê ·Îµå ¿Ï·á: {path}");
     }
 }
