@@ -47,8 +47,12 @@ MonoBehaviour:
   - RPC_LoadMap
   - RPC_SetTileState
   - SetTileClickedColor
+<<<<<<< Updated upstream
   - GetDamaged
   - OnBuildComplete
+=======
+  - RPC_LoadMapJson
+>>>>>>> Stashed changes
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

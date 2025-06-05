@@ -544,7 +544,7 @@ namespace Photon.Pun
                     }
 
 
-                    // if there are any arguments (in the incoming call check if the method is compatible
+                    // if there are any arguments (in the incoming call check if the method is compatibleS
                     if (parameters.Length == arguments.Length)
                     {
                         // Normal, PhotonNetworkMessage left out
